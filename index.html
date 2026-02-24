@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────
 // LIVE STOCK PRICES — Yahoo Finance (15min delayed)
-// Uses daily candles (range=3mo) for stable % calculations
+// Stable for GitHub Pages
 // ─────────────────────────────────────────
 
 async function fetchStockPrice(symbol, basePrice, sector) {
@@ -73,7 +73,7 @@ async function fetchAllStockPrices(onProgress) {
       onProgress(sym, done, entries.length, stockPrices[sym].live);
     }
 
-    // Small delay to avoid rate limiting
+    // small delay to prevent rate-limit
     await new Promise(r => setTimeout(r, 200));
   }
 }
