@@ -1,7 +1,8 @@
-// ─────────────────────────────────────────
-// LIVE STOCK PRICES — Yahoo Finance (15min delayed)
-// Stable for GitHub Pages
-// ─────────────────────────────────────────
+<script>
+
+// ==============================
+// LIVE STOCK PRICES (Yahoo)
+// ==============================
 
 async function fetchStockPrice(symbol, basePrice, sector) {
   const ticker = YF_SYMBOL[symbol];
@@ -38,7 +39,7 @@ async function fetchStockPrice(symbol, basePrice, sector) {
     };
 
   } catch (err) {
-    console.warn("Live price failed for:", symbol);
+    console.warn("Live price failed:", symbol);
     return fallbackPrice(symbol, basePrice, sector);
   }
 }
@@ -73,7 +74,34 @@ async function fetchAllStockPrices(onProgress) {
       onProgress(sym, done, entries.length, stockPrices[sym].live);
     }
 
-    // small delay to prevent rate-limit
     await new Promise(r => setTimeout(r, 200));
   }
 }
+
+// ==============================
+// INITIAL LOAD
+// ==============================
+
+(async () => {
+  try {
+    await fetchAllStockPrices();
+  } catch (e) {
+    console.error("Stock loading failed", e);
+  }
+
+  if (typeof loadAllData === "function") {
+    await loadAllData();
+  }
+
+  if (document.getElementById("loadingOverlay")) {
+    document.getElementById("loadingOverlay").style.display = "none";
+  }
+
+  if (typeof renderAll === "function") {
+    renderAll();
+  }
+})();
+
+</script>
+</body>
+</html>
